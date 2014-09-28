@@ -1,0 +1,8 @@
+- Iterador diagonal superior (Linha)
+- Iterador diagonal superior (Acima)
+- Iterador diagonal superior (Abaixo)
+- Iterador diagonal inferior (Linha)
+- Iterador diagonal inferior (Acima)
+- Iterador diagonal inferior (Abaixo)
+
+- Usar o iterador nas estatísticas
