@@ -75,7 +75,7 @@ public class PanelEdicao extends JPanel {
         @Override
         public void actionPerformed(ActionEvent ae) {
             Transformador t = new Transformador(imagem, MatrizTransformacaoFactory.escala(2, 2));
-            setImagem(t.transforma(true));
+            setImagem(t.transform(true));
             repaint();
         }
         
