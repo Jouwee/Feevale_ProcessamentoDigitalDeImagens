@@ -36,17 +36,23 @@ public class Aplicacao extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // Cria o menu bar
         JMenuBar menuBar = new JMenuBar();
+        JMenu mCarregar = new JMenu("Carregar exemplo");
+        mCarregar.add(new ActionCarregarExemplo("Lena", "lena.bmp"));
+        mCarregar.addSeparator();
+        mCarregar.add(new ActionCarregarExemplo("Exemplo 1", "1640752.jpg"));
+        mCarregar.add(new ActionCarregarExemplo("Exemplo 2", "BF4-Menu.jpg"));
+        mCarregar.add(new ActionCarregarExemplo("Exemplo 3", "Western-1024x682.jpg"));
+        mCarregar.add(new ActionCarregarExemplo("Exemplo 4", "beyond-two-souls1.jpg"));
+        mCarregar.add(new ActionCarregarExemplo("Exemplo 5", "tumblr_m8enw53BMf1rraheuo4_1280.jpg"));
         
-        JMenu j = new JMenu("Carregar exemplo");
-        j.add(new ActionCarregarExemplo("Lena", "lena.bmp"));
-        j.addSeparator();
-        j.add(new ActionCarregarExemplo("Exemplo 1", "1640752.jpg"));
-        j.add(new ActionCarregarExemplo("Exemplo 2", "BF4-Menu.jpg"));
-        j.add(new ActionCarregarExemplo("Exemplo 3", "Western-1024x682.jpg"));
-        j.add(new ActionCarregarExemplo("Exemplo 4", "beyond-two-souls1.jpg"));
-        j.add(new ActionCarregarExemplo("Exemplo 5", "tumblr_m8enw53BMf1rraheuo4_1280.jpg"));
+        JMenu mFiltros = new JMenu("Filtros");
+        mFiltros.add(new ActionFiltroGauss());
+        
+        JMenu mTransformar = new JMenu("Transformar");
 
-        menuBar.add(j);
+        menuBar.add(mCarregar);
+        menuBar.add(mTransformar);
+        menuBar.add(mFiltros);
         menuBar.add(new JMenuItem(new ActionCarregar()));
         setJMenuBar(menuBar);
         
@@ -95,8 +101,6 @@ public class Aplicacao extends JFrame {
         public void actionPerformed(ActionEvent e) {
             JFileChooser chooser = new JFileChooser();
             chooser.showOpenDialog(Aplicacao.this);
-            
-            
             imagem = ImagemLoader.fromFile(chooser.getSelectedFile());
             histograma = HistogramaFactory.buildHistograma(imagem);
             estatisticas = EstatisticasFactory.calculaEstatisticasExercicios(imagem);
@@ -135,5 +139,22 @@ public class Aplicacao extends JFrame {
         }
         
     }
+    
+    private class ActionFiltroGauss extends AbstractAction {
+
+        public ActionFiltroGauss() {
+            super("Filtro Gaussiano");
+        }
+        
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            FiltroGauss filtro = new FiltroGauss(3);
+            filtro.aplica(panelEdicao.getImagem());
+            getContentPane().repaint();
+        }
+        
+    }
+    
+    
     
 }
