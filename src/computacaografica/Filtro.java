@@ -34,7 +34,7 @@ public abstract class Filtro {
         int metadeTamanho = (int) Math.floor((float)tamanho / 2);
         
         for(int x = metadeTamanho; x < imagem.getWidth() - metadeTamanho; x++) {
-            for(int y = metadeTamanho; y < imagem.getWidth() - metadeTamanho; y++) {
+            for(int y = metadeTamanho; y < imagem.getHeight() - metadeTamanho; y++) {
                 int[][] pixels = new int[tamanho][tamanho];
                 
                 for(int x2 = 0; x2 < tamanho; x2++) {
