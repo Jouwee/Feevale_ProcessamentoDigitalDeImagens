@@ -47,6 +47,10 @@ public class Aplicacao extends JFrame {
         
         JMenu mFiltros = new JMenu("Filtros");
         mFiltros.add(new ActionFiltroGauss());
+        JMenu mDetecaoDeBordas = new JMenu("Detecção de bordas");
+        mDetecaoDeBordas.add(new ActionFiltroRoberts());
+        mDetecaoDeBordas.add(new ActionFiltroSobel());
+        mFiltros.add(mDetecaoDeBordas);
         
         JMenu mTransformar = new JMenu("Transformar");
 
@@ -149,6 +153,36 @@ public class Aplicacao extends JFrame {
         @Override
         public void actionPerformed(ActionEvent ae) {
             FiltroGauss filtro = new FiltroGauss(3);
+            filtro.aplica(panelEdicao.getImagem());
+            getContentPane().repaint();
+        }
+        
+    }
+    
+    private class ActionFiltroRoberts extends AbstractAction {
+
+        public ActionFiltroRoberts() {
+            super("Roberts");
+        }
+        
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            FiltroRoberts filtro = new FiltroRoberts();
+            filtro.aplica(panelEdicao.getImagem());
+            getContentPane().repaint();
+        }
+        
+    }
+    
+    private class ActionFiltroSobel extends AbstractAction {
+
+        public ActionFiltroSobel() {
+            super("Sobel");
+        }
+        
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            FiltroSobel filtro = new FiltroSobel();
             filtro.aplica(panelEdicao.getImagem());
             getContentPane().repaint();
         }
