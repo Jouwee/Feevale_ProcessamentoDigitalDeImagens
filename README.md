@@ -4,12 +4,12 @@ Recursos:
 * Leitura de estatísticas de imagens
 * Visualização do histograma de imagens
 * Transformação em imagens
-** Translação
-** Escala
-** Rotação
-** Espelhamento
+* Translação
+* Escala
+* Rotação
+* Espelhamento
 * Filtros
-** Desfoque
-*** Desfoque Gaussiano
-** Detecção de Bordas
-*** Método de Roberts
+* Desfoque
+* Desfoque Gaussiano
+* Detecção de Bordas
+* Método de Roberts
