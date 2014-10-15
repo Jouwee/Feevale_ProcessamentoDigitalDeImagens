@@ -50,6 +50,8 @@ public class Aplicacao extends JFrame {
         JMenu mDetecaoDeBordas = new JMenu("Detecção de bordas");
         mDetecaoDeBordas.add(new ActionFiltroRoberts());
         mDetecaoDeBordas.add(new ActionFiltroSobel());
+        mDetecaoDeBordas.add(new ActionFiltroKirsh());
+        mDetecaoDeBordas.add(new ActionFiltroRobinson());
         mFiltros.add(mDetecaoDeBordas);
         
         JMenu mTransformar = new JMenu("Transformar");
@@ -153,7 +155,7 @@ public class Aplicacao extends JFrame {
         @Override
         public void actionPerformed(ActionEvent ae) {
             FiltroGauss filtro = new FiltroGauss(3);
-            filtro.aplica(panelEdicao.getImagem());
+            panelEdicao.setImagem(filtro.aplica(panelEdicao.getImagem()));
             getContentPane().repaint();
         }
         
@@ -168,7 +170,7 @@ public class Aplicacao extends JFrame {
         @Override
         public void actionPerformed(ActionEvent ae) {
             FiltroRoberts filtro = new FiltroRoberts();
-            filtro.aplica(panelEdicao.getImagem());
+            panelEdicao.setImagem(filtro.aplica(panelEdicao.getImagem()));
             getContentPane().repaint();
         }
         
@@ -183,12 +185,39 @@ public class Aplicacao extends JFrame {
         @Override
         public void actionPerformed(ActionEvent ae) {
             FiltroSobel filtro = new FiltroSobel();
-            filtro.aplica(panelEdicao.getImagem());
+            panelEdicao.setImagem(filtro.aplica(panelEdicao.getImagem()));
             getContentPane().repaint();
         }
         
     }
     
+    private class ActionFiltroKirsh extends AbstractAction {
+
+        public ActionFiltroKirsh() {
+            super("Kirsh");
+        }
+        
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            FiltroKirsh filtro = new FiltroKirsh();
+            panelEdicao.setImagem(filtro.aplica(panelEdicao.getImagem()));
+            getContentPane().repaint();
+        }
+        
+    }
     
-    
+    private class ActionFiltroRobinson extends AbstractAction {
+
+        public ActionFiltroRobinson() {
+            super("Robinson");
+        }
+        
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            FiltroRobinson filtro = new FiltroRobinson();
+            panelEdicao.setImagem(filtro.aplica(panelEdicao.getImagem()));
+            getContentPane().repaint();
+        }
+        
+    }
 }

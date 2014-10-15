@@ -29,8 +29,10 @@ public abstract class Filtro {
      * 
      * @param imagem 
      */
-    public void aplica(Imagem imagem) {
+    public Imagem aplica(Imagem imagem) {
 
+        Imagem novaImagem = new Imagem(imagem.getWidth(), imagem.getHeight());
+        
         int metadeTamanho = (int) Math.floor((float)tamanho / 2);
         
         for(int x = metadeTamanho; x < imagem.getWidth() - metadeTamanho; x++) {
@@ -43,9 +45,10 @@ public abstract class Filtro {
                     }
                 }
                 
-                imagem.setPixel(x, y, calcula(pixels));
+                novaImagem.setPixel(x, y, calcula(pixels));
             }
         }
+        return novaImagem;
         
         
     }
