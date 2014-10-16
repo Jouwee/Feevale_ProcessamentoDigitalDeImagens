@@ -14,19 +14,17 @@ import java.awt.Point;
  */
 public class Transformador {
     
-    private final Imagem imagem;
     private final double[][] matrizTransformacao;
 
-    public Transformador(Imagem imagem, double[][] matrizTransformacao) {
-        this.imagem = imagem;
+    public Transformador(double[][] matrizTransformacao) {
         this.matrizTransformacao = matrizTransformacao;
     }
     
-    public Imagem transforma() {
-        return transform(false);
+    public Imagem transforma(Imagem imagem) {
+        return transform(imagem, false);
     }
     
-    public Imagem transform(boolean fill) {
+    public Imagem transform(Imagem imagem, boolean fill) {
         Imagem newImagem = new Imagem(imagem.getWidth(), imagem.getHeight(), fill);
         int z = 1;
         int halfX = imagem.getWidth() / 2;

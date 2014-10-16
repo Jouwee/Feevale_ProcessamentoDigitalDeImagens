@@ -13,7 +13,7 @@ package computacaografica;
 public class FiltroRobinson extends FiltroOitoMascaras {
 
     public FiltroRobinson() {
-        super(300,
+        super(200,
                 new int[][]{
                     {1, 2, 1},
                     {0, 0, 0},

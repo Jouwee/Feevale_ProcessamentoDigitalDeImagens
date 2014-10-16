@@ -12,7 +12,7 @@ package computacaografica;
 public class FiltroKirsh extends FiltroOitoMascaras {
 
     public FiltroKirsh() {
-        super(1000,
+        super(600,
                 new int[][]{
                     {5, 5, 5},
                     {-3, 0, -3},

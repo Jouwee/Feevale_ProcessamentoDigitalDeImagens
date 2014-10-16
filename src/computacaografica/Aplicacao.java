@@ -23,11 +23,10 @@ public class Aplicacao extends JFrame {
     private Imagem imagem;
     private Histograma histograma;
     private Estatisticas estatisticas;
-    private PanelHistograma panelHistograma;
-    private PanelVisualizacaoImagem panelImagemGrayscale;
-    private PanelEstatisticas panelEstatisticas;
-    private PanelReprocessamento panelReprocessamento;
-    private PanelEdicao panelEdicao;
+    private final PanelHistograma panelHistograma;
+    private final PanelEdicao panelEdicao;
+    private final PanelEstatisticas panelEstatisticas;
+    private final PanelReprocessamento panelReprocessamento;
     
     public Aplicacao() {
         super("Tabalho computação gráfica");
@@ -36,7 +35,8 @@ public class Aplicacao extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // Cria o menu bar
         JMenuBar menuBar = new JMenuBar();
-        JMenu mCarregar = new JMenu("Carregar exemplo");
+        JMenu mArquivo = new JMenu("Arquivo");
+        JMenu mCarregar = new JMenu("Abrir exemplo");
         mCarregar.add(new ActionCarregarExemplo("Lena", "lena.bmp"));
         mCarregar.addSeparator();
         mCarregar.add(new ActionCarregarExemplo("Exemplo 1", "1640752.jpg"));
@@ -45,24 +45,32 @@ public class Aplicacao extends JFrame {
         mCarregar.add(new ActionCarregarExemplo("Exemplo 4", "beyond-two-souls1.jpg"));
         mCarregar.add(new ActionCarregarExemplo("Exemplo 5", "tumblr_m8enw53BMf1rraheuo4_1280.jpg"));
         
+        mArquivo.add(new JMenuItem(new ActionAbrir()));
+        mArquivo.add(mCarregar);
+        
         JMenu mFiltros = new JMenu("Filtros");
-        mFiltros.add(new ActionFiltroGauss());
+        mFiltros.add(new ActionFiltro(new FiltroGauss(3), "Desfoque de Gauss"));
         JMenu mDetecaoDeBordas = new JMenu("Detecção de bordas");
-        mDetecaoDeBordas.add(new ActionFiltroRoberts());
-        mDetecaoDeBordas.add(new ActionFiltroSobel());
-        mDetecaoDeBordas.add(new ActionFiltroKirsh());
-        mDetecaoDeBordas.add(new ActionFiltroRobinson());
+        mDetecaoDeBordas.add(new ActionFiltro(new FiltroRoberts(), "Método de Roberts"));
+        mDetecaoDeBordas.add(new ActionFiltro(new FiltroSobel(), "Método de Sobel"));
+        mDetecaoDeBordas.add(new ActionFiltro(new FiltroKirsh(), "Método de Kirsh"));
+        mDetecaoDeBordas.add(new ActionFiltro(new FiltroRobinson(), "Método de Robinson"));
         mFiltros.add(mDetecaoDeBordas);
         
         JMenu mTransformar = new JMenu("Transformar");
+        mTransformar.add(new ActionTransformacao(MatrizTransformacaoFactory.translacao(5, 5), "Transladar"));
+        mTransformar.add(new ActionTransformacao(MatrizTransformacaoFactory.escala(2, 2), "Escala maior"));
+        mTransformar.add(new ActionTransformacao(MatrizTransformacaoFactory.escala(0.5, 0.5), "Escala menor"));
+        mTransformar.add(new ActionTransformacao(MatrizTransformacaoFactory.escala(1, -1), "Espelhamento horiz."));
+        mTransformar.add(new ActionTransformacao(MatrizTransformacaoFactory.escala(-1, 1), "Espelhamento vertical"));
+        mTransformar.add(new ActionTransformacao(MatrizTransformacaoFactory.rotacao(90), "Rotação 90o"));
+        mTransformar.add(new ActionTransformacao(MatrizTransformacaoFactory.rotacao(180), "Rotação 180o"));
 
-        menuBar.add(mCarregar);
+        menuBar.add(mArquivo);
         menuBar.add(mTransformar);
         menuBar.add(mFiltros);
-        menuBar.add(new JMenuItem(new ActionCarregar()));
         setJMenuBar(menuBar);
         
-        panelImagemGrayscale = new PanelVisualizacaoImagem();
         panelHistograma = new PanelHistograma(new Histograma());
         panelEstatisticas = new PanelEstatisticas();
         panelReprocessamento = new PanelReprocessamento();
@@ -71,13 +79,12 @@ public class Aplicacao extends JFrame {
         JTabbedPane tabs = new JTabbedPane();
         
         JPanel panel = new JPanel(new BorderLayout());
-        panel.add(panelImagemGrayscale);
+        panel.add(panelEdicao);
         panel.add(panelEstatisticas, BorderLayout.EAST);
         
-        tabs.add("Imagem original (Tons de cinza)", panel);
+        tabs.add("Imagem", panel);
         tabs.add("Histograma", panelHistograma);
         tabs.add("Panel reprocessamento", panelReprocessamento);
-        tabs.add("Editor", panelEdicao);
         
         getContentPane().add(tabs);
         
@@ -87,20 +94,17 @@ public class Aplicacao extends JFrame {
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException ex) {
-        } catch (InstantiationException ex) {
-        } catch (IllegalAccessException ex) {
-        } catch (UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
         }
         
         Aplicacao aplicacao = new Aplicacao();
         aplicacao.setVisible(true);
     }
     
-    private class ActionCarregar extends AbstractAction {
+    private class ActionAbrir extends AbstractAction {
 
-        public ActionCarregar() {
-            super("Carregar imagem externa...");
+        public ActionAbrir() {
+            super("Abrir...");
         }
 
         @Override
@@ -110,7 +114,6 @@ public class Aplicacao extends JFrame {
             imagem = ImagemLoader.fromFile(chooser.getSelectedFile());
             histograma = HistogramaFactory.buildHistograma(imagem);
             estatisticas = EstatisticasFactory.calculaEstatisticasExercicios(imagem);
-            panelImagemGrayscale.setImagem(imagem);
             panelHistograma.setHistograma(histograma);
             panelEstatisticas.setEstatisticas(estatisticas);
             panelReprocessamento.setEstatisticas(estatisticas);
@@ -135,7 +138,6 @@ public class Aplicacao extends JFrame {
             imagem = ImagemLoader.fromFile(Aplicacao.class.getResource("/computacaografica/samples/" + file).getFile());
             histograma = HistogramaFactory.buildHistograma(imagem);
             estatisticas = EstatisticasFactory.calculaEstatisticasExercicios(imagem);
-            panelImagemGrayscale.setImagem(imagem);
             panelHistograma.setHistograma(histograma);
             panelEstatisticas.setEstatisticas(estatisticas);
             panelReprocessamento.setEstatisticas(estatisticas);
@@ -146,78 +148,61 @@ public class Aplicacao extends JFrame {
         
     }
     
-    private class ActionFiltroGauss extends AbstractAction {
-
-        public ActionFiltroGauss() {
-            super("Filtro Gaussiano");
-        }
+    /**
+     * Action para execução de filtros
+     */
+    private class ActionFiltro extends AbstractAction {
         
+        /** Filtro à aplicar */
+        private Filtro filtro;
+
+        /**
+         * Cria a action
+         * @param filtro
+         * @param string 
+         */
+        public ActionFiltro(Filtro filtro, String string) {
+            super(string);
+            this.filtro = filtro;
+        }
+
         @Override
         public void actionPerformed(ActionEvent ae) {
-            FiltroGauss filtro = new FiltroGauss(3);
+            // Aplica o filtro
             panelEdicao.setImagem(filtro.aplica(panelEdicao.getImagem()));
+            // Atualiza o painel
             getContentPane().repaint();
         }
         
     }
     
-    private class ActionFiltroRoberts extends AbstractAction {
+    /**
+     * Action para transformações
+     */
+    private class ActionTransformacao extends AbstractAction {
 
-        public ActionFiltroRoberts() {
-            super("Roberts");
+        /** Transformador */
+        private final Transformador transformador;
+
+        /**
+         * Cria a action
+         * 
+         * @param matriz
+         * @param string 
+         */
+        public ActionTransformacao(double[][] matriz, String string) {
+            super(string);
+            // Cria o transformador
+            transformador = new Transformador(matriz);
         }
         
         @Override
         public void actionPerformed(ActionEvent ae) {
-            FiltroRoberts filtro = new FiltroRoberts();
-            panelEdicao.setImagem(filtro.aplica(panelEdicao.getImagem()));
+            // Aplica o filtro
+            panelEdicao.setImagem(transformador.transforma(panelEdicao.getImagem()));
+            // Atualiza o painel
             getContentPane().repaint();
         }
-        
     }
     
-    private class ActionFiltroSobel extends AbstractAction {
-
-        public ActionFiltroSobel() {
-            super("Sobel");
-        }
-        
-        @Override
-        public void actionPerformed(ActionEvent ae) {
-            FiltroSobel filtro = new FiltroSobel();
-            panelEdicao.setImagem(filtro.aplica(panelEdicao.getImagem()));
-            getContentPane().repaint();
-        }
-        
-    }
-    
-    private class ActionFiltroKirsh extends AbstractAction {
-
-        public ActionFiltroKirsh() {
-            super("Kirsh");
-        }
-        
-        @Override
-        public void actionPerformed(ActionEvent ae) {
-            FiltroKirsh filtro = new FiltroKirsh();
-            panelEdicao.setImagem(filtro.aplica(panelEdicao.getImagem()));
-            getContentPane().repaint();
-        }
-        
-    }
-    
-    private class ActionFiltroRobinson extends AbstractAction {
-
-        public ActionFiltroRobinson() {
-            super("Robinson");
-        }
-        
-        @Override
-        public void actionPerformed(ActionEvent ae) {
-            FiltroRobinson filtro = new FiltroRobinson();
-            panelEdicao.setImagem(filtro.aplica(panelEdicao.getImagem()));
-            getContentPane().repaint();
-        }
-        
-    }
 }
