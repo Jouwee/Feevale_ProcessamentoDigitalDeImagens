@@ -1,5 +1,11 @@
 package computacaografica;
 
+import computacaografica.filtros.FiltroRoberts;
+import computacaografica.filtros.FiltroSobel;
+import computacaografica.filtros.FiltroGauss;
+import computacaografica.filtros.FiltroKirsh;
+import computacaografica.filtros.FiltroRobinson;
+import computacaografica.filtros.Filtro;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
@@ -23,6 +29,8 @@ public class Aplicacao extends JFrame {
     private Imagem imagem;
     private Histograma histograma;
     private Estatisticas estatisticas;
+    /** Panel de configuração de filtros */
+    private JPanel panelConfigFiltro;
     private final PanelHistograma panelHistograma;
     private final PanelEdicao panelEdicao;
     private final PanelEstatisticas panelEstatisticas;
@@ -80,7 +88,14 @@ public class Aplicacao extends JFrame {
         
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(panelEdicao);
-        panel.add(panelEstatisticas, BorderLayout.EAST);
+        
+        
+        JPanel pEsquerdo = new JPanel(new BorderLayout());
+        panelConfigFiltro = new JPanel();
+        pEsquerdo.add(panelEstatisticas, BorderLayout.NORTH);
+        pEsquerdo.add(panelConfigFiltro, BorderLayout.CENTER);
+        
+        panel.add(pEsquerdo, BorderLayout.EAST);
         
         tabs.add("Imagem", panel);
         tabs.add("Histograma", panelHistograma);
@@ -168,10 +183,11 @@ public class Aplicacao extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent ae) {
-            // Aplica o filtro
-            panelEdicao.setImagem(filtro.aplica(panelEdicao.getImagem()));
-            // Atualiza o painel
-            getContentPane().repaint();
+            PanelConfiguracaoFactory.buildFiltroConfig(filtro, panelConfigFiltro, panelEdicao);
+//            // Aplica o filtro
+//            panelEdicao.setImagem(filtro.aplica(panelEdicao.getImagem()));
+//            // Atualiza o painel
+//            getContentPane().repaint();
         }
         
     }

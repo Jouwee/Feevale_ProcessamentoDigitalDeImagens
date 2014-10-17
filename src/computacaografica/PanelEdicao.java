@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 public class PanelEdicao extends JPanel {
     
     private Imagem imagem;
+    private Imagem preview;
     private PanelVisualizacaoImagem visualizacao;
 
     public PanelEdicao() {
@@ -38,7 +39,23 @@ public class PanelEdicao extends JPanel {
 
     public void setImagem(Imagem imagem) {
         this.imagem = imagem;
+        preview = null;
         visualizacao.setImagem(imagem);
+        repaint();
+    }
+    
+    public Imagem getPreview() {
+        return preview;
+    }
+
+    public void setPreview(Imagem imagem) {
+        this.preview = imagem;
+        if(imagem == null) {
+            visualizacao.setImagem(this.imagem);
+        } else {
+            visualizacao.setImagem(imagem);
+        }
+        repaint();
     }
     
 }

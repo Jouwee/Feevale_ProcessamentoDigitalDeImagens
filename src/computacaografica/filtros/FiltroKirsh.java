@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package computacaografica;
+package computacaografica.filtros;
 
 /**
  *
@@ -12,7 +12,7 @@ package computacaografica;
 public class FiltroKirsh extends FiltroOitoMascaras {
 
     public FiltroKirsh() {
-        super(600,
+        super(new Threshold(600), new ThresholdRange(0, 3825),
                 new int[][]{
                     {5, 5, 5},
                     {-3, 0, -3},

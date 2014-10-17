@@ -4,13 +4,13 @@
  * and open the template in the editor.
  */
 
-package computacaografica;
+package computacaografica.filtros;
 
 /**
  *
  * @author Nicolas
  */
-public class FiltroOitoMascaras extends Filtro {
+public class FiltroOitoMascaras extends Filtro implements FiltroLimiarizado {
     
     private final int[][] mascaraN;
     private final int[][] mascaraNE;
@@ -20,9 +20,10 @@ public class FiltroOitoMascaras extends Filtro {
     private final int[][] mascaraSW;
     private final int[][] mascaraW;
     private final int[][] mascaraNW;
-    private final int threshold;
+    private final ThresholdRange thresholdRange;
+    private Threshold threshold;
 
-    public FiltroOitoMascaras(int threshold, int[][] mascaraN, int[][] mascaraNE, int[][] mascaraE, int[][] mascaraSE, int[][] mascaraS, int[][] mascaraSW, int[][] mascaraW, int[][] mascaraNW) {
+    public FiltroOitoMascaras(Threshold threshold, ThresholdRange thresholdRange, int[][] mascaraN, int[][] mascaraNE, int[][] mascaraE, int[][] mascaraSE, int[][] mascaraS, int[][] mascaraSW, int[][] mascaraW, int[][] mascaraNW) {
         super(3);
         this.mascaraN = mascaraN;
         this.mascaraNE = mascaraNE;
@@ -33,6 +34,7 @@ public class FiltroOitoMascaras extends Filtro {
         this.mascaraW = mascaraW;
         this.mascaraNW = mascaraNW;
         this.threshold = threshold;
+        this.thresholdRange = thresholdRange;
     }
     
     
@@ -90,10 +92,25 @@ public class FiltroOitoMascaras extends Filtro {
         }
         
         int novoValor = 0;
-        if(gradiente > threshold) {
+        if(gradiente > threshold.getThreshold()) {
             novoValor = 255;
         }
         return novoValor;
+    }
+
+    @Override
+    public Threshold getThreshold() {
+        return threshold;
+    }
+
+    @Override
+    public void getThreshold(Threshold threshold) {
+        this.threshold = threshold;
+    }
+
+    @Override
+    public ThresholdRange getThresholdRange() {
+        return thresholdRange;
     }
 
     

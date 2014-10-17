@@ -4,7 +4,9 @@
  * and open the template in the editor.
  */
 
-package computacaografica;
+package computacaografica.filtros;
+
+import computacaografica.Imagem;
 
 /**
  *

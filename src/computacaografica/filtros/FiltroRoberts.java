@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package computacaografica;
+package computacaografica.filtros;
 
 /**
  *
@@ -13,7 +13,7 @@ package computacaografica;
 public class FiltroRoberts extends FiltroDuasMascaras {
 
     public FiltroRoberts() {
-        super(45, new int [][]{{0, 0, 0}, {0, -1, 0}, {0, 0, 1}}, new int [][]{{0, 0, 0}, {0, 0, -1}, {0, 1, 0}});
+        super(new Threshold(45), new ThresholdRange(0, 255), new int [][]{{0, 0, 0}, {0, -1, 0}, {0, 0, 1}}, new int [][]{{0, 0, 0}, {0, 0, -1}, {0, 1, 0}});
     }
     
 }

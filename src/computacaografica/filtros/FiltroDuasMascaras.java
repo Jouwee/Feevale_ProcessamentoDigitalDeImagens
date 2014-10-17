@@ -4,28 +4,27 @@
  * and open the template in the editor.
  */
 
-package computacaografica;
+package computacaografica.filtros;
 
 /**
  *
  * @author jouwee
  */
-public class FiltroDuasMascaras extends Filtro {
+public class FiltroDuasMascaras extends Filtro implements FiltroLimiarizado {
 
-    private final int threshold;
+    private Threshold threshold;
+    private final ThresholdRange thresholdRange;
     private final int[][] mascaraX;
     private final int[][] mascaraY;
     
     
-    public FiltroDuasMascaras(int threshold, int[][] mascaraX, int[][] mascaraY) {
+    public FiltroDuasMascaras(Threshold threshold, ThresholdRange thresholdRange, int[][] mascaraX, int[][] mascaraY) {
         super(3);
         this.threshold = threshold;
+        this.thresholdRange = thresholdRange;
         this.mascaraX = mascaraX;
         this.mascaraY = mascaraY;
     }
-
-    
-    
     
     @Override
     public int calcula(int[][] pixels) {
@@ -44,10 +43,25 @@ public class FiltroDuasMascaras extends Filtro {
         double gradiente = Math.sqrt(Math.pow(gradienteX, 2) + Math.pow(gradienteY, 2));
         
         int novoValor = 0;
-        if(gradiente > threshold) {
+        if(gradiente > threshold.getThreshold()) {
             novoValor = 255;
         }
         return novoValor;
+    }
+
+    @Override
+    public Threshold getThreshold() {
+        return threshold;
+    }
+
+    @Override
+    public void getThreshold(Threshold threshold) {
+        this.threshold = threshold;
+    }
+
+    @Override
+    public ThresholdRange getThresholdRange() {
+        return thresholdRange;
     }
     
 }
