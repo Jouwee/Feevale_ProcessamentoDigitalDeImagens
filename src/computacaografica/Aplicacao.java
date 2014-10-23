@@ -6,6 +6,9 @@ import computacaografica.filtros.FiltroGauss;
 import computacaografica.filtros.FiltroKirsh;
 import computacaografica.filtros.FiltroRobinson;
 import computacaografica.filtros.Filtro;
+import computacaografica.filtros.FiltroAbertura;
+import computacaografica.filtros.FiltroDilatacao;
+import computacaografica.filtros.FiltroReducao;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
@@ -64,6 +67,14 @@ public class Aplicacao extends JFrame {
         mDetecaoDeBordas.add(new ActionFiltro(new FiltroKirsh(), "Método de Kirsh"));
         mDetecaoDeBordas.add(new ActionFiltro(new FiltroRobinson(), "Método de Robinson"));
         mFiltros.add(mDetecaoDeBordas);
+
+        JMenu mMorfologia = new JMenu("Morfologia");
+        mMorfologia.add(new ActionFiltro(new FiltroDilatacao(), "Dilatação"));
+        mMorfologia.add(new ActionFiltro(new FiltroReducao(), "Redução"));
+        mMorfologia.add(new ActionFiltro(new FiltroAbertura(), "Abertura"));
+//        mMorfologia.add(new ActionFiltro(new FiltroKirsh(), "Método de Kirsh"));
+//        mMorfologia.add(new ActionFiltro(new FiltroRobinson(), "Método de Robinson"));
+        mFiltros.add(mMorfologia);
         
         JMenu mTransformar = new JMenu("Transformar");
         mTransformar.add(new ActionTransformacao(MatrizTransformacaoFactory.translacao(5, 5), "Transladar"));

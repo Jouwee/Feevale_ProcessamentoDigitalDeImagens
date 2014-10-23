@@ -47,7 +47,7 @@ public abstract class Filtro {
                     }
                 }
                 
-                novaImagem.setPixel(x, y, calcula(pixels));
+                novaImagem.setPixel(x, y, Math.max(Math.min(calcula(pixels), 255), 0));
             }
         }
         return novaImagem;
