@@ -10,7 +10,7 @@ package computacaografica.filtros;
  *
  * @author jouwee
  */
-public class FiltroDilatacao extends Filtro implements FiltroLimiarizado {
+public class FiltroDilatacao extends FiltroTodosPixeis implements FiltroLimiarizado {
 
     private ThresholdRange thresholdRange;
     private Threshold threshold;
@@ -18,24 +18,24 @@ public class FiltroDilatacao extends Filtro implements FiltroLimiarizado {
     
     public FiltroDilatacao() {
         super(3);
-        threshold = new Threshold(127);
-        thresholdRange = new ThresholdRange(0, 255);
+        threshold = new Threshold(0);
+        thresholdRange = new ThresholdRange(-255, 255);
     }
 
     
     
     @Override
     public int calcula(int[][] pixels) {
-        int maior = thresholdRange.getFloor();
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                int r = pixels[i][j] + threshold.getThreshold();
-                if(r > maior) {
-                    maior = r;
+        int menor = thresholdRange.getCeiling();
+        for (int i = 0; i < getTamanho(); i++) {
+            for (int j = 0; j < getTamanho(); j++) {
+                int r = pixels[i][j] - threshold.getThreshold();
+                if(r < menor) {
+                    menor = r;
                 }
             }
         }
-        return maior;
+        return menor;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class FiltroDilatacao extends Filtro implements FiltroLimiarizado {
     }
 
     @Override
-    public void getThreshold(Threshold threshold) {
+    public void setThreshold(Threshold threshold) {
         this.threshold = threshold;
     }
 

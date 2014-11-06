@@ -55,7 +55,7 @@ public class FiltroDuasMascaras extends Filtro implements FiltroLimiarizado {
     }
 
     @Override
-    public void getThreshold(Threshold threshold) {
+    public void setThreshold(Threshold threshold) {
         this.threshold = threshold;
     }
 

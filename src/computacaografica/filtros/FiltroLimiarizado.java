@@ -19,7 +19,7 @@ public interface FiltroLimiarizado {
      * 
      * @param threshold
      */
-    public abstract void getThreshold(Threshold threshold);
+    public abstract void setThreshold(Threshold threshold);
     
     /**
      * Retorna os limites do limiar do filtro

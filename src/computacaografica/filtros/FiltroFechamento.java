@@ -6,36 +6,33 @@
 
 package computacaografica.filtros;
 
+import computacaografica.Imagem;
+
 /**
  *
  * @author jouwee
  */
-public class FiltroReducao extends FiltroTodosPixeis implements FiltroLimiarizado {
+public class FiltroFechamento extends GenericFiltro implements FiltroLimiarizado {
 
+    
     private ThresholdRange thresholdRange;
     private Threshold threshold;
-    
-    
-    public FiltroReducao() {
+    private FiltroDilatacao dilatacao;
+    private FiltroReducao reducao;
+
+    public FiltroFechamento() {
         super(3);
         threshold = new Threshold(0);
         thresholdRange = new ThresholdRange(-255, 255);
+        dilatacao = new FiltroDilatacao();
+        dilatacao.setThreshold(threshold);
+        reducao = new FiltroReducao();
+        reducao.setThreshold(threshold);
     }
 
-    
-    
     @Override
-    public int calcula(int[][] pixels) {
-        int maior = thresholdRange.getFloor();
-        for (int i = 0; i < getTamanho(); i++) {
-            for (int j = 0; j < getTamanho(); j++) {
-                int r = pixels[i][j] + threshold.getThreshold();
-                if(r > maior) {
-                    maior = r;
-                }
-            }
-        }
-        return maior;
+    public Imagem aplica(Imagem imagem) {
+        return reducao.aplica(dilatacao.aplica(imagem));
     }
 
     @Override

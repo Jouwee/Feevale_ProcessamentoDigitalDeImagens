@@ -1,7 +1,7 @@
 package computacaografica;
 
-import computacaografica.filtros.Filtro;
 import computacaografica.filtros.FiltroLimiarizado;
+import computacaografica.filtros.GenericFiltro;
 import computacaografica.filtros.Threshold;
 import computacaografica.filtros.ThresholdRange;
 import java.awt.event.ActionEvent;
@@ -27,7 +27,7 @@ public class PanelConfiguracaoFactory {
      * @param panel Painel
      * @param panelImagem
      */
-    public static void buildFiltroConfig(final Filtro filtro, final JPanel panel, final PanelEdicao panelImagem) {
+    public static void buildFiltroConfig(final GenericFiltro filtro, final JPanel panel, final PanelEdicao panelImagem) {
         panel.removeAll();
         panel.repaint();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));

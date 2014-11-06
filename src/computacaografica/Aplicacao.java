@@ -7,8 +7,11 @@ import computacaografica.filtros.FiltroKirsh;
 import computacaografica.filtros.FiltroRobinson;
 import computacaografica.filtros.Filtro;
 import computacaografica.filtros.FiltroAbertura;
+import computacaografica.filtros.FiltroAfinamento;
 import computacaografica.filtros.FiltroDilatacao;
+import computacaografica.filtros.FiltroFechamento;
 import computacaografica.filtros.FiltroReducao;
+import computacaografica.filtros.GenericFiltro;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
@@ -72,6 +75,8 @@ public class Aplicacao extends JFrame {
         mMorfologia.add(new ActionFiltro(new FiltroDilatacao(), "Dilatação"));
         mMorfologia.add(new ActionFiltro(new FiltroReducao(), "Redução"));
         mMorfologia.add(new ActionFiltro(new FiltroAbertura(), "Abertura"));
+        mMorfologia.add(new ActionFiltro(new FiltroFechamento(), "Fechamento"));
+        mMorfologia.add(new ActionFiltro(new FiltroAfinamento(), "Afinamento"));
 //        mMorfologia.add(new ActionFiltro(new FiltroKirsh(), "Método de Kirsh"));
 //        mMorfologia.add(new ActionFiltro(new FiltroRobinson(), "Método de Robinson"));
         mFiltros.add(mMorfologia);
@@ -144,6 +149,7 @@ public class Aplicacao extends JFrame {
             panelEstatisticas.setEstatisticas(estatisticas);
             panelReprocessamento.setEstatisticas(estatisticas);
             panelReprocessamento.setImagem(imagem);
+            panelEdicao.setImagem(imagem);
             getContentPane().repaint();
         }
         
@@ -180,14 +186,14 @@ public class Aplicacao extends JFrame {
     private class ActionFiltro extends AbstractAction {
         
         /** Filtro à aplicar */
-        private Filtro filtro;
+        private GenericFiltro filtro;
 
         /**
          * Cria a action
          * @param filtro
          * @param string 
          */
-        public ActionFiltro(Filtro filtro, String string) {
+        public ActionFiltro(GenericFiltro filtro, String string) {
             super(string);
             this.filtro = filtro;
         }

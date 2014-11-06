@@ -12,24 +12,13 @@ import computacaografica.Imagem;
  *
  * @author jouwee
  */
-public abstract class Filtro extends GenericFiltro {
-    
-    public Filtro(int tamanho) {
-        super(tamanho);
+public abstract class FiltroTodosPixeis extends Filtro {
+
+    public FiltroTodosPixeis(int size) {
+        super(size);
     }
+
     
-    /**
-     * 
-     * @param pixels
-     * @return 
-     */
-    public abstract int calcula(int[][] pixels);
-    
-    /**
-     * 
-     * @param imagem 
-     * @return  
-     */
     @Override
     public Imagem aplica(Imagem imagem) {
 
@@ -47,13 +36,18 @@ public abstract class Filtro extends GenericFiltro {
                     }
                 }
                 
-                novaImagem.setPixel(x, y, Math.max(Math.min(calcula(pixels), 255), 0));
+                int v = Math.max(Math.min(calcula(pixels), 255), 0);
+
+                for (int i = 0; i < getTamanho(); i++) {
+                    for (int j = 0; j < getTamanho(); j++) {
+                        novaImagem.setPixel(x + i - metadeTamanho, y + j - metadeTamanho, v);
+                    }
+                }
             }
         }
         return novaImagem;
-        
-        
     }
-
+    
+    
     
 }
