@@ -71,6 +71,9 @@ public class Imagem {
         Color c = new Color(v, v, v, alpha);
         image.setRGB(x, y, c.getRGB());
     }
+    public void setPixel(int x, int y, Color color) {
+        image.setRGB(x, y, color.getRGB());
+    }
 
     public int getPixelAlpha(int x, int y) {
         return image.getRGB(x, y) & 0xFF000000;

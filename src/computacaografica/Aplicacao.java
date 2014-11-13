@@ -5,7 +5,6 @@ import computacaografica.filtros.FiltroSobel;
 import computacaografica.filtros.FiltroGauss;
 import computacaografica.filtros.FiltroKirsh;
 import computacaografica.filtros.FiltroRobinson;
-import computacaografica.filtros.Filtro;
 import computacaografica.filtros.FiltroAbertura;
 import computacaografica.filtros.FiltroAfinamento;
 import computacaografica.filtros.FiltroDilatacao;
@@ -58,6 +57,7 @@ public class Aplicacao extends JFrame {
         mCarregar.add(new ActionCarregarExemplo("Exemplo 3", "Western-1024x682.jpg"));
         mCarregar.add(new ActionCarregarExemplo("Exemplo 4", "beyond-two-souls1.jpg"));
         mCarregar.add(new ActionCarregarExemplo("Exemplo 5", "tumblr_m8enw53BMf1rraheuo4_1280.jpg"));
+        mCarregar.add(new ActionCarregarExemplo("Exemplo 6", "teste.png"));
         
         mArquivo.add(new JMenuItem(new ActionAbrir()));
         mArquivo.add(mCarregar);
@@ -90,9 +90,13 @@ public class Aplicacao extends JFrame {
         mTransformar.add(new ActionTransformacao(MatrizTransformacaoFactory.rotacao(90), "Rotação 90o"));
         mTransformar.add(new ActionTransformacao(MatrizTransformacaoFactory.rotacao(180), "Rotação 180o"));
 
+        JMenu mExtracaoCaracteristicas = new JMenu("Extração de cracterísticas");
+        mExtracaoCaracteristicas.add(new ActionExtracaoCaracteristicas());
+        
         menuBar.add(mArquivo);
         menuBar.add(mTransformar);
         menuBar.add(mFiltros);
+        menuBar.add(mExtracaoCaracteristicas);
         setJMenuBar(menuBar);
         
         panelHistograma = new PanelHistograma(new Histograma());
@@ -236,6 +240,20 @@ public class Aplicacao extends JFrame {
             // Atualiza o painel
             getContentPane().repaint();
         }
+    }
+    
+    private class ActionExtracaoCaracteristicas extends AbstractAction {
+
+        public ActionExtracaoCaracteristicas() {
+            super("Extração de características");
+        }
+        
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            JanelaExtracaoCaracteristicas janela = new JanelaExtracaoCaracteristicas(imagem);
+            janela.setVisible(true);
+        }   
+        
     }
     
 }
