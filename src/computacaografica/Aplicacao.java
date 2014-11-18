@@ -57,7 +57,7 @@ public class Aplicacao extends JFrame {
         mCarregar.add(new ActionCarregarExemplo("Exemplo 3", "Western-1024x682.jpg"));
         mCarregar.add(new ActionCarregarExemplo("Exemplo 4", "beyond-two-souls1.jpg"));
         mCarregar.add(new ActionCarregarExemplo("Exemplo 5", "tumblr_m8enw53BMf1rraheuo4_1280.jpg"));
-        mCarregar.add(new ActionCarregarExemplo("Exemplo 6", "teste.png"));
+        mCarregar.add(new ActionCarregarExemplo("Exemplo 6", "teste_1.png"));
         
         mArquivo.add(new JMenuItem(new ActionAbrir()));
         mArquivo.add(mCarregar);

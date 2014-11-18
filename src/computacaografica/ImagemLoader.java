@@ -26,12 +26,16 @@ public class ImagemLoader {
             for (int y = 0; y < img.getHeight(); y++) {
                 for (int x = 0; x < img.getWidth(); x++) {
                     
-                    int[] v = new int[3];
-                    v[0] = r.getSample(x, y, 0);
-                    v[1] = r.getSample(x, y, 1);
-                    v[2] = r.getSample(x, y, 2);
-                    
-                    img.setPixel(x, y, toGrayScale(v));
+                    if(r.getNumBands() > 1) {
+                        int[] v = new int[3];
+                        v[0] = r.getSample(x, y, 0);
+                        v[1] = r.getSample(x, y, 1);
+                        v[2] = r.getSample(x, y, 2);
+
+                        img.setPixel(x, y, toGrayScale(v));
+                    } else {
+                        img.setPixel(x, y, r.getSample(x, y, 0));
+                    }
                     
                 }
             }
