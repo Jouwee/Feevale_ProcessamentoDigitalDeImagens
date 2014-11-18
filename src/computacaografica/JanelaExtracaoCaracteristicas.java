@@ -15,7 +15,7 @@ import javax.swing.event.ListSelectionListener;
  * @author jouwee
  */
 public class JanelaExtracaoCaracteristicas extends JDialog {
-    
+
     private Imagem imagem;
     private ExtratorCaracteristicas extrator;
     private PanelVisualizacaoImagem visualizacao;
@@ -26,10 +26,10 @@ public class JanelaExtracaoCaracteristicas extends JDialog {
         setSize(800, 600);
         setLocationRelativeTo(null);
         this.imagem = imagem;
-        
+
         extrator = new ExtratorCaracteristicas(imagem);
         extrator.executa();
-        
+
         fLista = new JList<>(extrator.getObjetos().toArray());
         fLista.addListSelectionListener(new ListSelectionListener() {
 
@@ -38,18 +38,18 @@ public class JanelaExtracaoCaracteristicas extends JDialog {
                 visualizacao.repaint();
             }
         });
-        
+
         visualizacao = new MyPanelVisualizacao();
         visualizacao.setImagem(imagem);
-        
-//        fLista = new 
-        
+
+//        fLista = new
+
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(visualizacao);
         getContentPane().add(fLista, BorderLayout.WEST);
-        
+
     }
-    
+
     public class MyPanelVisualizacao extends PanelVisualizacaoImagem {
 
         @Override
@@ -68,8 +68,13 @@ public class JanelaExtracaoCaracteristicas extends JDialog {
             for (Point point : objeto.getPerimetro()) {
                 g.fillRect(point.x + dx, point.y + dy, 1, 1);
             }
+            // Desenha o perímetro
+            g.setColor(Color.blue);
+            for (Vertice vertice : objeto.getVertices()) {
+                g.fillRect(vertice.getX() + dx - 1, vertice.getY() + dy - 1, 3, 3);
+            }
         }
-        
+
     }
-    
+
 }

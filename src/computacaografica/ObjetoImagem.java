@@ -9,15 +9,17 @@ import java.util.List;
  * @author jouwee
  */
 public class ObjetoImagem {
-    
+
     private int cor;
     private int area;
     private final List<Point> perimetro;
+    private final List<Vertice> vertices;
 
     public ObjetoImagem() {
-        this.perimetro = new ArrayList<>();
+        perimetro = new ArrayList<>();
+        vertices = new ArrayList<>();
     }
-    
+
     public int getCor() {
         return cor;
     }
@@ -42,9 +44,17 @@ public class ObjetoImagem {
         perimetro.add(pixel);
     }
 
+    public List<Vertice> getVertices() {
+        return vertices;
+    }
+
+    public void addVertice(Vertice vertice) {
+        vertices.add(vertice);
+    }
+
     @Override
     public String toString() {
-        return "ObjetoImagem{" + "cor=" + cor + ", area=" + area + ", perimetro=" + perimetro.size() + '}';
+        return "ObjetoImagem{" + "cor=" + cor + ", area=" + area + ", perimetro=" + perimetro.size() + ", vertices=" + vertices.size() + '}';
     }
-    
+
 }

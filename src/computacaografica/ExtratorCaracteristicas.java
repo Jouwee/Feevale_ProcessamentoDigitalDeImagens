@@ -14,24 +14,24 @@ public class ExtratorCaracteristicas {
     private final List<ObjetoImagem> objetos;
     private int background;
     private int foreground;
-    
+
     public ExtratorCaracteristicas(Imagem imagem) {
         this.imagem = imagem;
         this.objetos = new ArrayList<>();
-        
+
         // TODO: Parametrizar
         background = 255;
         foreground = 0;
-        
+
     }
-    
+
     public void executa() {
         // Classifica os objetos
         classificaObjetos();
         // Extrai dados geométricos basicos (Área e perímetro)
         extraiGeometria();
-        
-        
+        // Encontra os vértices dos bojetos selecionados
+        encontraVertices();
     }
 
     /**
@@ -54,14 +54,14 @@ public class ExtratorCaracteristicas {
             }
         }
     }
-    
+
     /**
      * Coloriza os vizinhos que forem da cor foreground da cor especificada de
      * forma recursiva, até colorir todo o objeto
-     * 
+     *
      * @param x
      * @param y
-     * @param color 
+     * @param color
      */
     public void colorNeighbours(int x, int y, int color) {
         imagem.setPixel(x, y, color);
@@ -78,7 +78,7 @@ public class ExtratorCaracteristicas {
             colorNeighbours(x + 1, y, color);
         }
     }
-    
+
     /**
      * Extrai informações geométricas básicas da imagem
      */
@@ -103,10 +103,146 @@ public class ExtratorCaracteristicas {
             }
         }
     }
-    
+
+    /**
+     * Encontra os vértices dos objetos previamente classificados
+     */
+    public void encontraVertices() {
+        // Percorre os objetos
+        for (ObjetoImagem objeto : objetos) {
+            // Percorre o perímetro dos objetos
+            for (Point point : objeto.getPerimetro()) {
+
+                // Obs: " " = fundo, "#" = frente, "*" = qualquer um
+
+                if(matches(point, objeto.getCor(), "*****",
+                                                   "**   ",
+                                                   "* ###",
+                                                   "* #**",
+                                                   "* #**")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+                if(matches(point, objeto.getCor(), "* #**",
+                                                   "* #**",
+                                                   "* ###",
+                                                   "**   ",
+                                                   "*****")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+                if(matches(point, objeto.getCor(), "**# *",
+                                                   "**# *",
+                                                   "### *",
+                                                   "   **",
+                                                   "*****")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+                if(matches(point, objeto.getCor(), "*****",
+                                                   "   **",
+                                                   "### *",
+                                                   "**# *",
+                                                   "**# *")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+
+
+                if(matches(point, objeto.getCor(), "*****",
+                                                   "*****",
+                                                   "***#*",
+                                                   "**#  ",
+                                                   "*** *")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+                if(matches(point, objeto.getCor(), "*****",
+                                                   "*****",
+                                                   "###**",
+                                                   "  #**",
+                                                   "* #**")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+                if(matches(point, objeto.getCor(), "**# *",
+                                                   "**#  ",
+                                                   "**###",
+                                                   "*****",
+                                                   "*****")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+                if(matches(point, objeto.getCor(), "* #**",
+                                                   "  #**",
+                                                   "###**",
+                                                   "*****",
+                                                   "*****")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+
+
+
+            }
+        }
+    }
+
+    /**
+     *
+     * @param color Verifica se o pixel atual bate com a máscara
+     *
+     * @param p
+     * @param masks
+     * @return
+     */
+    public boolean matches(Point p, int color, String... masks) {
+        boolean debug = false;
+        if(p.x == 210 && p.y == 52) {
+            debug = true;
+        }
+
+        int height = masks.length;
+        int width = masks[0].length();
+
+        int[][] mask = new int[height][width];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                mask[i][j] = masks[i].charAt(j) == ' ' ? background : masks[i].charAt(j) == '#' ? color : -1;
+            }
+        }
+        // Carrega os pixels
+        int[][] pixels = new int[height][width];
+        int hx = width / 2;
+        int hy = height / 2;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                pixels[y][x] = getSafePixel(p.x + x - hx, p.y + y - hy);
+            }
+        }
+
+
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+
+                if(debug) {
+                    System.out.println("x: " + x);
+                    System.out.println("y: " + y);
+                    System.out.println("m: " + mask[y][x]);
+                    System.out.println("v: " + pixels[y][x]);
+                }
+
+                if(mask[y][x] > -1 && pixels[y][x] != mask[y][x]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public int getSafePixel(int x, int y) {
+        if(x < 0 || y < 0 || x >= imagem.getWidth() || y >= imagem.getHeight()) {
+            return background;
+        }
+        return imagem.getPixel(x, y);
+    }
+
     /**
      * Retorna o objeto à partir da cor
-     * 
+     *
      * @param cor
      * @return ObjetoImagem
      */
@@ -118,7 +254,7 @@ public class ExtratorCaracteristicas {
         }
         return null;
     }
-    
+
     public Imagem getImagem() {
         return imagem;
     }
@@ -126,5 +262,5 @@ public class ExtratorCaracteristicas {
     public List<ObjetoImagem> getObjetos() {
         return objetos;
     }
-    
+
 }
