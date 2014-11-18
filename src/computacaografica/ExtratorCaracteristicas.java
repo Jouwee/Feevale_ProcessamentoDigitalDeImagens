@@ -1,6 +1,6 @@
 package computacaografica;
 
-import java.util.AbstractList;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,9 +26,10 @@ public class ExtratorCaracteristicas {
     }
     
     public void executa() {
+        // Classifica os objetos
         classificaObjetos();
-        
-        System.out.println("Encontrei " + objetos.size() + " objetos");
+        // Extrai dados geométricos basicos (Área e perímetro)
+        extraiGeometria();
         
         
     }
@@ -147,6 +148,46 @@ public class ExtratorCaracteristicas {
             }
         }
         return base;
+    }
+    
+    /**
+     * Extrai informações geométricas básicas da imagem
+     */
+    public void extraiGeometria() {
+        for(int y = 0; y < imagem.getHeight(); y++) {
+            for(int x = 0; x < imagem.getWidth(); x++) {
+                // Se não for cor de fundo
+                if(imagem.getPixel(x, y) != background) {
+                    ObjetoImagem objeto = getObjetoByCor(imagem.getPixel(x, y));
+                    // Incrementa a área
+                    objeto.setArea(objeto.getArea() + 1);
+                    // Se estiver na borda da imagem
+                    if(x == 0 || y == 0 || x == imagem.getWidth() - 1 || y == imagem.getHeight() - 1) {
+                        objeto.addToPerimetro(new Point(x, y));
+                    } else {
+                        // Se algum dos vizinhos for a cor de fundo
+                        if(imagem.getPixel(x - 1, y) == background || imagem.getPixel(x + 1, y) == background || imagem.getPixel(x, y - 1) == background || imagem.getPixel(x, y + 1) == background) {
+                            objeto.addToPerimetro(new Point(x, y));
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
+     * Retorna o objeto à partir da cor
+     * 
+     * @param cor
+     * @return ObjetoImagem
+     */
+    public ObjetoImagem getObjetoByCor(int cor) {
+        for (ObjetoImagem objetoImagem : objetos) {
+            if(objetoImagem.getCor() == cor) {
+                return objetoImagem;
+            }
+        }
+        return null;
     }
     
     public Imagem getImagem() {

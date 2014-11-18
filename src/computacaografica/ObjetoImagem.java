@@ -1,5 +1,9 @@
 package computacaografica;
 
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author jouwee
@@ -8,8 +12,12 @@ public class ObjetoImagem {
     
     private int cor;
     private int area;
-    private int perimetro;
+    private final List<Point> perimetro;
 
+    public ObjetoImagem() {
+        this.perimetro = new ArrayList<>();
+    }
+    
     public int getCor() {
         return cor;
     }
@@ -26,17 +34,17 @@ public class ObjetoImagem {
         this.area = area;
     }
 
-    public int getPerimetro() {
+    public List<Point> getPerimetro() {
         return perimetro;
     }
 
-    public void setPerimetro(int perimetro) {
-        this.perimetro = perimetro;
+    public void addToPerimetro(Point pixel) {
+        perimetro.add(pixel);
     }
 
     @Override
     public String toString() {
-        return "ObjetoImagem{" + "cor=" + cor + ", area=" + area + ", perimetro=" + perimetro + '}';
+        return "ObjetoImagem{" + "cor=" + cor + ", area=" + area + ", perimetro=" + perimetro.size() + '}';
     }
     
 }
