@@ -14,10 +14,14 @@ public class ObjetoImagem {
     private int area;
     private final List<Point> perimetro;
     private final List<Vertice> vertices;
-
+    private String tipo;
+    private boolean closed;
+    
     public ObjetoImagem() {
         perimetro = new ArrayList<>();
         vertices = new ArrayList<>();
+        tipo = "Indefinido";
+        closed = false;
     }
 
     public int getCor() {
@@ -52,9 +56,25 @@ public class ObjetoImagem {
         vertices.add(vertice);
     }
 
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public boolean isClosed() {
+        return closed;
+    }
+
+    public void setClosed(boolean closed) {
+        this.closed = closed;
+    }
+    
     @Override
     public String toString() {
-        return "ObjetoImagem{" + "cor=" + cor + ", area=" + area + ", perimetro=" + perimetro.size() + ", vertices=" + vertices.size() + '}';
+        return "ObjetoImagem{" + "cor=" + cor + ", area=" + area + ", perimetro=" + perimetro.size() + ", vertices=" + vertices.size() + ", tipo=" + tipo + ", closed=" + closed + '}';
     }
 
 }

@@ -33,4 +33,9 @@ public class Vertice {
         this.y = y;
     }
 
+    @Override
+    public String toString() {
+        return "Vertice{" + "x=" + x + ", y=" + y + '}';
+    }
+
 }

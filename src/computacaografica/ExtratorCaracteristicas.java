@@ -26,18 +26,20 @@ public class ExtratorCaracteristicas {
     }
 
     public void executa() {
-        // Classifica os objetos
-        classificaObjetos();
+        // Separa os objetos os objetos
+        separaObjetos();
         // Extrai dados geométricos basicos (Área e perímetro)
         extraiGeometria();
         // Encontra os vértices dos bojetos selecionados
         encontraVertices();
+        // Classifica todos os objetos
+        classificaObjetos();
     }
 
     /**
-     * Classifica os objetos na imagem
+     * Separa os objetos na imagem
      */
-    public void classificaObjetos() {
+    public void separaObjetos() {
         int nextColor = 1;
         for(int y = 0; y < imagem.getHeight(); y++) {
             for(int x = 0; x < imagem.getWidth(); x++) {
@@ -95,7 +97,9 @@ public class ExtratorCaracteristicas {
                         objeto.addToPerimetro(new Point(x, y));
                     } else {
                         // Se algum dos vizinhos for a cor de fundo
-                        if(imagem.getPixel(x - 1, y) == background || imagem.getPixel(x + 1, y) == background || imagem.getPixel(x, y - 1) == background || imagem.getPixel(x, y + 1) == background) {
+                        if(imagem.getPixel(x - 1, y - 1) == background || imagem.getPixel(x, y - 1) == background || imagem.getPixel(x + 1, y - 1) == background ||
+                           imagem.getPixel(x - 1, y) == background || imagem.getPixel(x, y) == background || imagem.getPixel(x + 1, y) == background ||
+                           imagem.getPixel(x - 1, y + 1) == background || imagem.getPixel(x, y + 1) == background || imagem.getPixel(x + 1, y + 1) == background) {
                             objeto.addToPerimetro(new Point(x, y));
                         }
                     }
@@ -112,9 +116,10 @@ public class ExtratorCaracteristicas {
         for (ObjetoImagem objeto : objetos) {
             // Percorre o perímetro dos objetos
             for (Point point : objeto.getPerimetro()) {
-
                 // Obs: " " = fundo, "#" = frente, "*" = qualquer um
 
+                
+                // Cantos de 90º
                 if(matches(point, objeto.getCor(), "*****",
                                                    "**   ",
                                                    "* ###",
@@ -147,9 +152,9 @@ public class ExtratorCaracteristicas {
 
                 if(matches(point, objeto.getCor(), "*****",
                                                    "*****",
-                                                   "***#*",
+                                                   "**###",
                                                    "**#  ",
-                                                   "*** *")) {
+                                                   "**# *")) {
                     objeto.addVertice(new Vertice(point.x, point.y));
                 }
                 if(matches(point, objeto.getCor(), "*****",
@@ -174,6 +179,123 @@ public class ExtratorCaracteristicas {
                     objeto.addVertice(new Vertice(point.x, point.y));
                 }
 
+                // Pontas de linhas
+                if(matches(point, objeto.getCor(), "* # *",
+                                                   "* # *",
+                                                   "* # *",
+                                                   "** **",
+                                                   "*****")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+                if(matches(point, objeto.getCor(), "*****",
+                                                   "** **",
+                                                   "* # *",
+                                                   "* # *",
+                                                   "* # *")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+                if(matches(point, objeto.getCor(), "*****",
+                                                   "   **",
+                                                   "### *",
+                                                   "   **",
+                                                   "*****")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+                if(matches(point, objeto.getCor(), "*****",
+                                                   "**  *",
+                                                   "* ###",
+                                                   "**   ",
+                                                   "*****")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+
+                // Triângulos
+                if(matches(point, objeto.getCor(), "*****",
+                                                   "** **",
+                                                   "* # *",
+                                                   " ### ",
+                                                   "#####")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+                if(matches(point, objeto.getCor(), "#####",
+                                                   " ### ",
+                                                   "* # *",
+                                                   "** **",
+                                                   "*****")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+                if(matches(point, objeto.getCor(), "# ***",
+                                                   "## **",
+                                                   "### *",
+                                                   "## **",
+                                                   "# ***")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+                if(matches(point, objeto.getCor(), "*** #",
+                                                   "** ##",
+                                                   "* ###",
+                                                   "** ##",
+                                                   "*** #")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+
+                if(matches(point, objeto.getCor(), "*****",
+                                                   "** **",
+                                                   "* # *",
+                                                   " ## *",
+                                                   "### *")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+                if(matches(point, objeto.getCor(), "*****",
+                                                   "** **",
+                                                   "* # *",
+                                                   "* ## ",
+                                                   "* ###")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+                if(matches(point, objeto.getCor(), "* ###",
+                                                   "* ## ",
+                                                   "* # *",
+                                                   "** **",
+                                                   "*****")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+                if(matches(point, objeto.getCor(), "### *",
+                                                   " ## *",
+                                                   "* # *",
+                                                   "** **",
+                                                   "*****")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+                if(matches(point, objeto.getCor(), "*****",
+                                                   "   **",
+                                                   "### *",
+                                                   "## **",
+                                                   "# ***")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+                if(matches(point, objeto.getCor(), "# ***",
+                                                   "## **",
+                                                   "### *",
+                                                   "   **",
+                                                   "*****")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+                if(matches(point, objeto.getCor(), "*****",
+                                                   "**   ",
+                                                   "* ###",
+                                                   "** ##",
+                                                   "*** #")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+                if(matches(point, objeto.getCor(), "*** #",
+                                                   "** ##",
+                                                   "* ###",
+                                                   "**   ",
+                                                   "*****")) {
+                    objeto.addVertice(new Vertice(point.x, point.y));
+                }
+
 
 
             }
@@ -189,14 +311,8 @@ public class ExtratorCaracteristicas {
      * @return
      */
     public boolean matches(Point p, int color, String... masks) {
-        boolean debug = false;
-        if(p.x == 210 && p.y == 52) {
-            debug = true;
-        }
-
         int height = masks.length;
         int width = masks[0].length();
-
         int[][] mask = new int[height][width];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
@@ -212,19 +328,8 @@ public class ExtratorCaracteristicas {
                 pixels[y][x] = getSafePixel(p.x + x - hx, p.y + y - hy);
             }
         }
-
-
-
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-
-                if(debug) {
-                    System.out.println("x: " + x);
-                    System.out.println("y: " + y);
-                    System.out.println("m: " + mask[y][x]);
-                    System.out.println("v: " + pixels[y][x]);
-                }
-
                 if(mask[y][x] > -1 && pixels[y][x] != mask[y][x]) {
                     return false;
                 }
@@ -253,6 +358,68 @@ public class ExtratorCaracteristicas {
             }
         }
         return null;
+    }
+
+    /**
+     * Classifica os tipos de objetos
+     */
+    public void classificaObjetos() {
+        for (ObjetoImagem objeto : objetos) {
+            // Se for um objeto de até 4 pixels e sem vértices
+            if(objeto.getArea() <= 4 && objeto.getVertices().isEmpty()) {
+                objeto.setTipo("Ponto");
+                continue;
+            }
+            // Se for um objeto com 1 linha de espessura (área == perímetro) e tiver 2 ou mais pontos
+            if(objeto.getArea() == objeto.getPerimetro().size() && objeto.getVertices().size() >= 2) {
+                objeto.setTipo("Linha");
+                continue;
+            }
+            // Se tiver exatamente 4 vértices
+            if(objeto.getVertices().size() == 4) {
+                objeto.setTipo("Quadrilátero");
+                // Percorre os vértices na ordem de ligação
+                List<Vertice> localVertices = new ArrayList<>(objeto.getVertices());
+                // Coloca os primeiros vértice no fim pra facilitar a iteração
+                localVertices.add(localVertices.get(0));
+                localVertices.add(localVertices.get(1));
+                for (int i = 0; i < objeto.getVertices().size() - 2; i++) {
+                    // Ref: https://br.answers.yahoo.com/question/index?qid=20090316205502AAVQt2U
+                    Vertice a = objeto.getVertices().get(i);
+                    Vertice b = objeto.getVertices().get(i + 1);
+                    Vertice c = objeto.getVertices().get(i + 2);
+                    // Coeficiente angular
+                    double caBC = 0;
+                    double caBA = 0;
+                    if(c.getX() != b.getX()) {
+                        caBC = (c.getY() - b.getY()) / (c.getX() - b.getX());
+                    }
+                    if(a.getX() != b.getX()) {
+                        caBA = (a.getY() - b.getY()) / (a.getX() - b.getX());
+                    }
+                    // Angulos
+                    double aBC = Math.toDegrees(Math.atan(caBC));
+                    double aBA = Math.toDegrees(Math.atan(caBA));
+                    // Angulo
+                    double ang = Math.abs(aBC) + Math.abs(aBA);
+                    
+                    System.out.println("a: " + a);
+                    System.out.println("b: " + b);
+                    System.out.println("c: " + c);
+                    
+                    System.out.println("ang: " + ang);
+                    
+                    System.out.println("");
+                    
+                }
+                continue;
+            }
+            // Se tiver exatamente 3 vértices
+            if(objeto.getVertices().size() == 3) {
+                objeto.setTipo("Triângulo");
+                continue;
+            }
+        }
     }
 
     public Imagem getImagem() {
