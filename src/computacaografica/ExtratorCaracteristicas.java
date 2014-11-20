@@ -430,9 +430,6 @@ public class ExtratorCaracteristicas {
             }
             // Se tiver exatamente 4 vértices
             if(objeto.getVertices().size() == 4) {
-                
-                
-                
                 objeto.setTipo("Quadrilátero");
                 // Percorre os vértices na ordem de ligação
                 List<Vertice> localVertices = new ArrayList<>(objeto.getVertices());
@@ -469,14 +466,13 @@ public class ExtratorCaracteristicas {
             }
             // Se não tem vértices
             if(objeto.getVertices().isEmpty()) {
-                
                 double p = objeto.getPerimetro().size();
                 double a = objeto.getArea().size();
-                
                 double c = (p * p) / (4 * Math.PI * a);
-                
                 objeto.setCircularidade(c);
-                
+                if(c > 0.75 && c < 1.1) {
+                    objeto.setTipo("Círculo");
+                }
             }
         }
     }
