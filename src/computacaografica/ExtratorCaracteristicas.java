@@ -91,21 +91,30 @@ public class ExtratorCaracteristicas {
                 if(imagem.getPixel(x, y) != background) {
                     ObjetoImagem objeto = getObjetoByCor(imagem.getPixel(x, y));
                     // Incrementa a área
-                    objeto.setArea(objeto.getArea() + 1);
+                    objeto.addToArea(new Point(x, y));
                     // Se estiver na borda da imagem
                     if(x == 0 || y == 0 || x == imagem.getWidth() - 1 || y == imagem.getHeight() - 1) {
                         objeto.addToPerimetro(new Point(x, y));
                     } else {
                         // Se algum dos vizinhos for a cor de fundo
-                        if(imagem.getPixel(x - 1, y - 1) == background || imagem.getPixel(x, y - 1) == background || imagem.getPixel(x + 1, y - 1) == background ||
-                           imagem.getPixel(x - 1, y) == background || imagem.getPixel(x, y) == background || imagem.getPixel(x + 1, y) == background ||
-                           imagem.getPixel(x - 1, y + 1) == background || imagem.getPixel(x, y + 1) == background || imagem.getPixel(x + 1, y + 1) == background) {
+//                        if(imagem.getPixel(x - 1, y - 1) == background || imagem.getPixel(x, y - 1) == background || imagem.getPixel(x + 1, y - 1) == background ||
+//                           imagem.getPixel(x - 1, y) == background || imagem.getPixel(x, y) == background || imagem.getPixel(x + 1, y) == background ||
+//                           imagem.getPixel(x - 1, y + 1) == background || imagem.getPixel(x, y + 1) == background || imagem.getPixel(x + 1, y + 1) == background) {
+                        if(imagem.getPixel(x, y - 1) == background ||
+                           imagem.getPixel(x - 1, y) == background || imagem.getPixel(x + 1, y) == background ||
+                           imagem.getPixel(x, y + 1) == background) {
                             objeto.addToPerimetro(new Point(x, y));
                         }
                     }
                 }
             }
         }
+        
+        for (ObjetoImagem objeto : objetos) {
+            // Ordena os vértices
+            sortPerimetro(objeto);
+        }
+        
     }
 
     /**
@@ -361,22 +370,69 @@ public class ExtratorCaracteristicas {
     }
 
     /**
+     * Ordena o perímetro em sentido horário
+     * 
+     * @param objeto 
+     */
+    private void sortPerimetro(ObjetoImagem objeto) {
+        List<Point> sorted = new ArrayList<>();
+        List<Point> toSort = new ArrayList<>(objeto.getPerimetro());
+        
+        Point current;
+        current = toSort.get(0);
+        sorted.add(toSort.get(0));
+        toSort.remove(0);
+        
+        while(!toSort.isEmpty()) {
+            if(toSort.size() == 1) {
+                sorted.add(toSort.get(0));
+                current = toSort.get(0);
+                toSort.remove(0);
+                break;
+            }
+            boolean processou = false;
+            for (Point aux : toSort) {
+                // Se for vizinho
+                if(aux.x >= current.x - 1 && aux.x <= current.x + 1 && aux.y >= current.y - 1 && aux.y <= current.y + 1) {
+                    sorted.add(aux);
+                    toSort.remove(aux);
+                    current = aux;
+                    processou = true;
+                    break;
+                }
+            }
+            if(!processou) {
+                sorted.add(toSort.get(0));
+                current = toSort.get(0);
+                toSort.remove(0);
+            }
+        }
+        
+        
+//        objeto.setPerimetro(sorted);
+    }
+    
+    /**
      * Classifica os tipos de objetos
      */
     public void classificaObjetos() {
         for (ObjetoImagem objeto : objetos) {
             // Se for um objeto de até 4 pixels e sem vértices
-            if(objeto.getArea() <= 4 && objeto.getVertices().isEmpty()) {
+            if(objeto.getArea().size() <= 4 && objeto.getVertices().isEmpty()) {
                 objeto.setTipo("Ponto");
                 continue;
             }
+           
             // Se for um objeto com 1 linha de espessura (área == perímetro) e tiver 2 ou mais pontos
-            if(objeto.getArea() == objeto.getPerimetro().size() && objeto.getVertices().size() >= 2) {
+            if(objeto.getArea().size() == objeto.getPerimetro().size() && objeto.getVertices().size() >= 2) {
                 objeto.setTipo("Linha");
                 continue;
             }
             // Se tiver exatamente 4 vértices
             if(objeto.getVertices().size() == 4) {
+                
+                
+                
                 objeto.setTipo("Quadrilátero");
                 // Percorre os vértices na ordem de ligação
                 List<Vertice> localVertices = new ArrayList<>(objeto.getVertices());
@@ -392,24 +448,16 @@ public class ExtratorCaracteristicas {
                     double caBC = 0;
                     double caBA = 0;
                     if(c.getX() != b.getX()) {
-                        caBC = (c.getY() - b.getY()) / (c.getX() - b.getX());
+                        caBC = ((double)c.getY() - (double)b.getY()) / ((double)c.getX() - (double)b.getX());
                     }
                     if(a.getX() != b.getX()) {
-                        caBA = (a.getY() - b.getY()) / (a.getX() - b.getX());
+                        caBA = ((double)a.getY() - (double)b.getY()) / ((double)a.getX() - (double)b.getX());
                     }
                     // Angulos
                     double aBC = Math.toDegrees(Math.atan(caBC));
                     double aBA = Math.toDegrees(Math.atan(caBA));
                     // Angulo
                     double ang = Math.abs(aBC) + Math.abs(aBA);
-                    
-                    System.out.println("a: " + a);
-                    System.out.println("b: " + b);
-                    System.out.println("c: " + c);
-                    
-                    System.out.println("ang: " + ang);
-                    
-                    System.out.println("");
                     
                 }
                 continue;
@@ -418,6 +466,17 @@ public class ExtratorCaracteristicas {
             if(objeto.getVertices().size() == 3) {
                 objeto.setTipo("Triângulo");
                 continue;
+            }
+            // Se não tem vértices
+            if(objeto.getVertices().isEmpty()) {
+                
+                double p = objeto.getPerimetro().size();
+                double a = objeto.getArea().size();
+                
+                double c = (p * p) / (4 * Math.PI * a);
+                
+                objeto.setCircularidade(c);
+                
             }
         }
     }

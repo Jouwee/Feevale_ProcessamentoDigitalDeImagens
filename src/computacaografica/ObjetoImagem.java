@@ -11,17 +11,17 @@ import java.util.List;
 public class ObjetoImagem {
 
     private int cor;
-    private int area;
-    private final List<Point> perimetro;
-    private final List<Vertice> vertices;
+    private List<Point> area;
+    private double circularidade;
+    private List<Point> perimetro;
+    private List<Vertice> vertices;
     private String tipo;
-    private boolean closed;
     
     public ObjetoImagem() {
         perimetro = new ArrayList<>();
         vertices = new ArrayList<>();
+        area = new ArrayList<>();
         tipo = "Indefinido";
-        closed = false;
     }
 
     public int getCor() {
@@ -32,11 +32,15 @@ public class ObjetoImagem {
         this.cor = cor;
     }
 
-    public int getArea() {
+    public List<Point> getArea() {
         return area;
     }
 
-    public void setArea(int area) {
+    public void addToArea(Point p) {
+        area.add(p);
+    }
+    
+    public void setArea(List<Point> area) {
         this.area = area;
     }
 
@@ -44,6 +48,10 @@ public class ObjetoImagem {
         return perimetro;
     }
 
+    public void setPerimetro(List<Point> perimetro) {
+        this.perimetro = perimetro;
+    }
+    
     public void addToPerimetro(Point pixel) {
         perimetro.add(pixel);
     }
@@ -52,6 +60,11 @@ public class ObjetoImagem {
         return vertices;
     }
 
+    public void setVertices(List<Vertice> vertices) {
+        this.vertices = vertices;
+    }
+
+    
     public void addVertice(Vertice vertice) {
         vertices.add(vertice);
     }
@@ -64,17 +77,21 @@ public class ObjetoImagem {
         this.tipo = tipo;
     }
 
-    public boolean isClosed() {
-        return closed;
+    public double getCircularidade() {
+        return circularidade;
     }
 
-    public void setClosed(boolean closed) {
-        this.closed = closed;
+    public void setCircularidade(double circularidade) {
+        this.circularidade = circularidade;
+    }
+    
+    public boolean contains(Point p) {
+        return area.contains(p);
     }
     
     @Override
     public String toString() {
-        return "ObjetoImagem{" + "cor=" + cor + ", area=" + area + ", perimetro=" + perimetro.size() + ", vertices=" + vertices.size() + ", tipo=" + tipo + ", closed=" + closed + '}';
+        return "Objeto # " + cor;
     }
 
 }
