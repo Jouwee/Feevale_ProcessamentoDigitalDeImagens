@@ -5,11 +5,11 @@ import java.awt.image.BufferedImage;
 
 /**
  * Imagem de um canal (grayscale)
- * 
+ *
  * @author nicolas
  */
 public class Imagem {
-    
+
     /** Dados */
     private BufferedImage image;
     /** Largura */
@@ -19,20 +19,20 @@ public class Imagem {
 
     /**
      * Cria uma imagem vazia
-     * 
+     *
      * @param width
-     * @param height 
+     * @param height
      */
     public Imagem(int width, int height) {
         this(width, height, false);
     }
-    
+
     /**
      * Cria uma imagem vazia
-     * 
+     *
      * @param width
-     * @param height 
-     * @param alpha 
+     * @param height
+     * @param alpha
      */
     public Imagem(int width, int height, boolean alpha) {
         image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -45,12 +45,12 @@ public class Imagem {
                 }
             }
         }
-        
+
     }
 
     /**
      * Cria uma imagem vazia
-     * 
+     *
      * @param image
      */
     public Imagem(BufferedImage image) {
@@ -78,7 +78,7 @@ public class Imagem {
     public int getPixelAlpha(int x, int y) {
         return image.getRGB(x, y) & 0xFF000000;
     }
-    
+
     public BufferedImage getImage() {
         return image;
     }
@@ -90,5 +90,15 @@ public class Imagem {
     public int getHeight() {
         return height;
     }
-    
+
+    public Imagem clone() {
+        Imagem clone = new Imagem(width, height);
+        for(int y = 0; y < getHeight(); y++) {
+            for(int x = 0; x < getWidth(); x++) {
+                clone.setPixel(x, y, getPixel(x, y));
+            }
+        }
+        return clone;
+    }
+
 }

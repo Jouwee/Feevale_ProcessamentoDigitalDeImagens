@@ -16,7 +16,7 @@ public class ExtratorCaracteristicas {
     private int foreground;
 
     public ExtratorCaracteristicas(Imagem imagem) {
-        this.imagem = imagem;
+        this.imagem = imagem.clone();
         this.objetos = new ArrayList<>();
 
         // TODO: Parametrizar
@@ -96,10 +96,6 @@ public class ExtratorCaracteristicas {
                     if(x == 0 || y == 0 || x == imagem.getWidth() - 1 || y == imagem.getHeight() - 1) {
                         objeto.addToPerimetro(new Point(x, y));
                     } else {
-                        // Se algum dos vizinhos for a cor de fundo
-//                        if(imagem.getPixel(x - 1, y - 1) == background || imagem.getPixel(x, y - 1) == background || imagem.getPixel(x + 1, y - 1) == background ||
-//                           imagem.getPixel(x - 1, y) == background || imagem.getPixel(x, y) == background || imagem.getPixel(x + 1, y) == background ||
-//                           imagem.getPixel(x - 1, y + 1) == background || imagem.getPixel(x, y + 1) == background || imagem.getPixel(x + 1, y + 1) == background) {
                         if(imagem.getPixel(x, y - 1) == background ||
                            imagem.getPixel(x - 1, y) == background || imagem.getPixel(x + 1, y) == background ||
                            imagem.getPixel(x, y + 1) == background) {
@@ -109,12 +105,12 @@ public class ExtratorCaracteristicas {
                 }
             }
         }
-        
+
         for (ObjetoImagem objeto : objetos) {
             // Ordena os vértices
             sortPerimetro(objeto);
         }
-        
+
     }
 
     /**
@@ -127,7 +123,7 @@ public class ExtratorCaracteristicas {
             for (Point point : objeto.getPerimetro()) {
                 // Obs: " " = fundo, "#" = frente, "*" = qualquer um
 
-                
+
                 // Cantos de 90º
                 if(matches(point, objeto.getCor(), "*****",
                                                    "**   ",
@@ -371,18 +367,18 @@ public class ExtratorCaracteristicas {
 
     /**
      * Ordena o perímetro em sentido horário
-     * 
-     * @param objeto 
+     *
+     * @param objeto
      */
     private void sortPerimetro(ObjetoImagem objeto) {
         List<Point> sorted = new ArrayList<>();
         List<Point> toSort = new ArrayList<>(objeto.getPerimetro());
-        
+
         Point current;
         current = toSort.get(0);
         sorted.add(toSort.get(0));
         toSort.remove(0);
-        
+
         while(!toSort.isEmpty()) {
             if(toSort.size() == 1) {
                 sorted.add(toSort.get(0));
@@ -407,11 +403,11 @@ public class ExtratorCaracteristicas {
                 toSort.remove(0);
             }
         }
-        
-        
+
+
 //        objeto.setPerimetro(sorted);
     }
-    
+
     /**
      * Classifica os tipos de objetos
      */
@@ -422,7 +418,7 @@ public class ExtratorCaracteristicas {
                 objeto.setTipo("Ponto");
                 continue;
             }
-           
+
             // Se for um objeto com 1 linha de espessura (área == perímetro) e tiver 2 ou mais pontos
             if(objeto.getArea().size() == objeto.getPerimetro().size() && objeto.getVertices().size() >= 2) {
                 objeto.setTipo("Linha");
@@ -455,7 +451,7 @@ public class ExtratorCaracteristicas {
                     double aBA = Math.toDegrees(Math.atan(caBA));
                     // Angulo
                     double ang = Math.abs(aBC) + Math.abs(aBA);
-                    
+
                 }
                 continue;
             }

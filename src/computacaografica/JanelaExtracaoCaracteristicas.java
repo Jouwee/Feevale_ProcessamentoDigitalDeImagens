@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.DecimalFormat;
 import javax.swing.BorderFactory;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -45,7 +46,7 @@ public class JanelaExtracaoCaracteristicas extends JDialog {
         extrator.executa();
 
         fLista = new JList<>(extrator.getObjetos().toArray());
-        fLista.setPreferredSize(new Dimension(150, 600));
+
         fLista.addListSelectionListener(new ListSelectionListener() {
 
             @Override
@@ -54,7 +55,8 @@ public class JanelaExtracaoCaracteristicas extends JDialog {
                 visualizacao.repaint();
                 fId.setText(String.valueOf(selected.getCor()));
                 fArea.setText(selected.getArea().size() + " px");
-                fCircularidade.setText(String.valueOf(selected.getCircularidade()));
+                DecimalFormat f = new DecimalFormat();
+                fCircularidade.setText(f.format(selected.getCircularidade()));
                 fPerimetro.setText(selected.getPerimetro().size() + " px");
                 fVertices.setText(String.valueOf(selected.getVertices().size()));
                 fTipo.setText(selected.getTipo());
@@ -64,7 +66,7 @@ public class JanelaExtracaoCaracteristicas extends JDialog {
         visualizacao = new MyPanelVisualizacao();
         visualizacao.setImagem(imagem);
 
-        
+
         JPanel pInformacoes = new JPanel(null);
         pInformacoes.setBorder(BorderFactory.createTitledBorder("Informações"));
         pInformacoes.setPreferredSize(new Dimension(800, 110));
@@ -76,7 +78,7 @@ public class JanelaExtracaoCaracteristicas extends JDialog {
         fId.setEditable(false);
         fId.setBounds(160, 20, 50, 25);
         pInformacoes.add(fId);
-        
+
         JLabel l2 = new JLabel("Perímetro", JLabel.RIGHT);
         l2.setBounds(0, 45, 150, 25);
         pInformacoes.add(l2);
@@ -116,14 +118,16 @@ public class JanelaExtracaoCaracteristicas extends JDialog {
         fVertices.setEditable(false);
         fVertices.setBounds(470, 70, 150, 25);
         pInformacoes.add(fVertices);
-        
+
         JPanel pPri = new JPanel(new BorderLayout(5, 5));
         pPri.add(visualizacao);
-        pPri.add(new JScrollPane(fLista), BorderLayout.WEST);
+        JScrollPane scroll = new JScrollPane(fLista);
+        scroll.setPreferredSize(new Dimension(150, 600));
+        pPri.add(scroll, BorderLayout.WEST);
         pPri.add(pInformacoes, BorderLayout.SOUTH);
-        
+
         pPri.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
+
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(pPri);
 
@@ -135,7 +139,7 @@ public class JanelaExtracaoCaracteristicas extends JDialog {
             super();
             addMouseListener(this);
         }
-        
+
         @Override
         public void paint(Graphics g) {
             super.paint(g);
@@ -190,8 +194,8 @@ public class JanelaExtracaoCaracteristicas extends JDialog {
         @Override
         public void mouseExited(MouseEvent me) {
         }
-        
-        
+
+
 
     }
 
