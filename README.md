@@ -1,4 +1,6 @@
-Aplicativo de Processamento Digital de Imagens desenvolvido para uso ditático.
+Aplicativo desenvolvido para a cadeira de Processamento Digital de Imagens
+
+Universidade Feevale, 2014
 
 Recursos:
 * Leitura de estatísticas de imagens
